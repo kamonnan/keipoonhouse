@@ -1,0 +1,14 @@
+<div class="min-h-screen flex flex-col items-center justify-center">
+  <h1 class="text-3xl font-bold mb-8">
+    Who's using?
+  </h1>
+
+  <div class="flex flex-col gap-4 w-64">
+    <% @users.each do |user| %>
+      <%= button_to user.name,
+          login_path(user),
+          method: :post,
+          class: "bg-black text-white py-3 rounded-xl" %>
+    <% end %>
+  </div>
+</div>

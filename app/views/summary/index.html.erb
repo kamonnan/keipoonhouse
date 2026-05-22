@@ -1,0 +1,81 @@
+<div class="p-8">
+
+  <h1 class="text-3xl font-bold mb-4">
+    Hi <%= @current_user.name %>
+  </h1>
+
+  <% net = @net_balance || 0 %>
+
+    <div class="text-xl mb-6">
+      Net balance:
+
+      <% if net > 0 %>
+        <span class="text-green-600">
+          +$<%= net.round(2) %> (people owe you)
+        </span>
+
+      <% elsif net < 0 %>
+        <span class="text-red-600">
+          -$<%= net.abs.round(2) %> (you owe people)
+        </span>
+
+      <% else %>
+        <span>All settled 🎉</span>
+      <% end %>
+    </div>
+
+  <h2 class="text-xl font-bold mb-2">
+    Detailed balances
+  </h2>
+
+  <ul class="space-y-2">
+    <% @balances.each do |user_id, amount| %>
+      <% next if user_id == @current_user.id %>
+
+      <% user = User.find(user_id) %>
+
+      <li>
+        <%= user.name %>:
+
+        <% if amount > 0 %>
+          owes you
+          <span class="text-green-600">
+            $<%= amount.round(2) %>
+          </span>
+
+        <% elsif amount < 0 %>
+          you owe
+          <span class="text-red-600">
+            $<%= amount.abs.round(2) %>
+          </span>
+
+        <% else %>
+          settled
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <h2 class="text-xl font-bold mt-8 mb-2">
+  Simplified payments
+</h2>
+
+<ul class="space-y-2">
+  <% @settlements.each do |s| %>
+    <li>
+      <%= User.find(s[:from]).name %>
+      → 
+      <%= User.find(s[:to]).name %>
+
+      <strong>
+        $<%= s[:amount].round(2) %>
+      </strong>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to "History",
+    expenses_path,
+    class: "border px-4 py-2 rounded-xl" %>
+    
+</div>

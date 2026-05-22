@@ -1,0 +1,51 @@
+<div class="max-w-xl mx-auto p-8">
+  <h1 class="text-3xl font-bold mb-8">
+    Add Expense
+  </h1>
+
+  <%= form_with model: @expense do |f| %>
+
+    <div class="mb-4">
+      <%= f.label :title %>
+      <%= f.text_field :title,
+          class: "w-full border rounded-xl p-2" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :amount %>
+      <%= f.number_field :amount,
+          step: 0.01,
+          class: "w-full border rounded-xl p-2" %>
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :paid_by %>
+
+      <%= f.collection_select :paid_by_id,
+          @users,
+          :id,
+          :name,
+          {},
+          class: "w-full border rounded-xl p-2" %>
+    </div>
+
+    <div class="mb-6">
+      <p class="font-bold mb-2">
+        Split with:
+      </p>
+
+      <% @users.each do |user| %>
+        <div class="mb-2">
+          <%= check_box_tag "expense[participant_ids][]",
+              user.id %>
+
+          <%= user.name %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= f.submit "Create Expense",
+        class: "bg-black text-white px-6 py-3 rounded-xl" %>
+
+  <% end %>
+</div>
