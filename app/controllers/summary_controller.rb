@@ -19,8 +19,21 @@ class SummaryController < ApplicationController
       end
     end
 
+    settlements = Settlement.all
+
+    settlements.each do |s|
+      balances[s.from_user_id] += s.amount
+      balances[s.to_user_id] -= s.amount
+    end
+
+
     @balances = balances
     @net_balance = balances[@current_user.id] || 0
     @settlements = DebtSimplifier.call(balances)
+
+    Settlement.find_each do |s|
+      balances[s.from_user_id] += s.amount.to_f
+      balances[s.to_user_id] -= s.amount.to_f
+    end
   end
 end

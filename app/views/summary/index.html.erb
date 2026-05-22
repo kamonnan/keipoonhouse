@@ -1,81 +1,122 @@
-<div class="p-8">
+<div class="max-w-xl mx-auto p-6">
 
-  <h1 class="text-3xl font-bold mb-4">
-    Hi <%= @current_user.name %>
+  <h1 class="text-3xl font-bold mb-2">
+    Hi <%= @current_user.name %> 👋
   </h1>
 
+  <p class="text-gray-500 mb-6">
+    Here’s your current balance
+  </p>
+
+  <!-- NET BALANCE CARD -->
   <% net = @net_balance || 0 %>
 
-    <div class="text-xl mb-6">
-      Net balance:
+  <div class="p-4 rounded-xl mb-6 text-white
+    <%= net >= 0 ? 'bg-green-500' : 'bg-red-500' %>">
 
-      <% if net > 0 %>
-        <span class="text-green-600">
-          +$<%= net.round(2) %> (people owe you)
-        </span>
+    <div class="text-sm opacity-80">
+      Net balance
+    </div>
 
-      <% elsif net < 0 %>
-        <span class="text-red-600">
-          -$<%= net.abs.round(2) %> (you owe people)
-        </span>
-
+    <div class="text-2xl font-bold">
+      <% if net >= 0 %>
+        +$<%= net.round(2) %>
       <% else %>
-        <span>All settled 🎉</span>
+        -$<%= net.abs.round(2) %>
       <% end %>
     </div>
 
-  <h2 class="text-xl font-bold mb-2">
-    Detailed balances
+    <div class="text-sm mt-1">
+      <%= net >= 0 ? "People owe you" : "You owe people" %>
+    </div>
+  </div>
+
+  <!-- DETAIL BALANCES -->
+  <h2 class="text-lg font-bold mb-3">
+    Details
   </h2>
 
-  <ul class="space-y-2">
+  <div class="space-y-3">
+
     <% @balances.each do |user_id, amount| %>
       <% next if user_id == @current_user.id %>
-
       <% user = User.find(user_id) %>
 
-      <li>
-        <%= user.name %>:
+      <div class="p-3 border rounded-xl flex justify-between items-center">
 
-        <% if amount > 0 %>
-          owes you
-          <span class="text-green-600">
-            $<%= amount.round(2) %>
-          </span>
+        <div>
+          <div class="font-medium"><%= user.name %></div>
 
-        <% elsif amount < 0 %>
-          you owe
-          <span class="text-red-600">
-            $<%= amount.abs.round(2) %>
-          </span>
+          <div class="text-sm text-gray-500">
+            <% if amount > 0 %>
+              owes you
+            <% elsif amount < 0 %>
+              you owe
+            <% else %>
+              settled
+            <% end %>
+          </div>
+        </div>
 
-        <% else %>
-          settled
-        <% end %>
-      </li>
+        <div class="font-bold
+          <%= amount > 0 ? 'text-green-600' : 'text-red-600' %>">
+
+          <% if amount > 0 %>
+            +$<%= amount.round(2) %>
+          <% elsif amount < 0 %>
+            -$<%= amount.abs.round(2) %>
+          <% else %>
+            $0
+          <% end %>
+        </div>
+
+      </div>
     <% end %>
-  </ul>
+
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="mt-6 flex gap-3">
+    <%= link_to "➕ Add Expense",
+        new_expense_path,
+        class: "flex-1 text-center bg-black text-white py-2 rounded-xl" %>
+
+    <%= link_to "📜 History",
+        expenses_path,
+        class: "flex-1 text-center border py-2 rounded-xl" %>
+  </div>
 
   <h2 class="text-xl font-bold mt-8 mb-2">
-  Simplified payments
+  Settle debts
 </h2>
 
-<ul class="space-y-2">
+<div class="space-y-2">
   <% @settlements.each do |s| %>
-    <li>
-      <%= User.find(s[:from]).name %>
-      → 
-      <%= User.find(s[:to]).name %>
+    <div class="flex justify-between items-center border p-3 rounded-xl">
 
-      <strong>
-        $<%= s[:amount].round(2) %>
-      </strong>
-    </li>
+      <div>
+        <div class="font-medium">
+          <%= User.find(s[:from]).name %>
+          → 
+          <%= User.find(s[:to]).name %>
+        </div>
+
+        <div class="text-sm text-gray-500">
+          $<%= s[:amount].round(2) %>
+        </div>
+      </div>
+
+      <%= button_to "Mark as paid",
+          settlements_path,
+          method: :post,
+          params: {
+            from_user_id: s[:from],
+            to_user_id: s[:to],
+            amount: s[:amount]
+          },
+          class: "bg-black text-white px-3 py-1 rounded-lg" %>
+    </div>
   <% end %>
-</ul>
+</div>
 
-<%= link_to "History",
-    expenses_path,
-    class: "border px-4 py-2 rounded-xl" %>
-    
 </div>

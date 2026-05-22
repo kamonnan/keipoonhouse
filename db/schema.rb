@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_22_062921) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_22_070453) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -35,6 +35,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_22_062921) do
     t.index ["paid_by_id"], name: "index_expenses_on_paid_by_id"
   end
 
+  create_table "settlements", force: :cascade do |t|
+    t.bigint "from_user_id"
+    t.bigint "to_user_id"
+    t.decimal "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_user_id"], name: "index_settlements_on_from_user_id"
+    t.index ["to_user_id"], name: "index_settlements_on_to_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -45,4 +55,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_22_062921) do
   add_foreign_key "expense_participants", "users"
   add_foreign_key "expenses", "users", column: "created_by_id"
   add_foreign_key "expenses", "users", column: "paid_by_id"
+  add_foreign_key "settlements", "users", column: "from_user_id"
+  add_foreign_key "settlements", "users", column: "to_user_id"
 end

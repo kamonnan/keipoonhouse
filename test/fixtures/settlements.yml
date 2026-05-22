@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  from_user: one
+  to_user: one
+  amount: 9.99
+
+two:
+  from_user: two
+  to_user: two
+  amount: 9.99

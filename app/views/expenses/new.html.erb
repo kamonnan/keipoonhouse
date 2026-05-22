@@ -1,51 +1,77 @@
-<div class="max-w-xl mx-auto p-8">
-  <h1 class="text-3xl font-bold mb-8">
-    Add Expense
+<div class="max-w-xl mx-auto p-6">
+
+  <h1 class="text-3xl font-bold mb-6">
+    ➕ Add Expense
   </h1>
 
   <%= form_with model: @expense do |f| %>
 
+    <!-- TITLE -->
     <div class="mb-4">
-      <%= f.label :title %>
+      <label class="text-sm text-gray-500">Title</label>
       <%= f.text_field :title,
-          class: "w-full border rounded-xl p-2" %>
+          class: "w-full border rounded-xl p-3 mt-1",
+          placeholder: "e.g. Costco, Dinner, Gas" %>
     </div>
 
+    <!-- AMOUNT -->
     <div class="mb-4">
-      <%= f.label :amount %>
+      <label class="text-sm text-gray-500">Amount</label>
       <%= f.number_field :amount,
           step: 0.01,
-          class: "w-full border rounded-xl p-2" %>
+          class: "w-full border rounded-xl p-3 mt-1",
+          placeholder: "0.00" %>
     </div>
 
+    <!-- PAID BY -->
     <div class="mb-6">
-      <%= f.label :paid_by %>
+      <label class="text-sm text-gray-500">Paid by</label>
 
       <%= f.collection_select :paid_by_id,
           @users,
           :id,
           :name,
           {},
-          class: "w-full border rounded-xl p-2" %>
+          class: "w-full border rounded-xl p-3 mt-1" %>
     </div>
 
+    <!-- SPLIT -->
     <div class="mb-6">
-      <p class="font-bold mb-2">
-        Split with:
-      </p>
+      <div class="text-sm text-gray-500 mb-2">
+        Split with
+      </div>
 
-      <% @users.each do |user| %>
-        <div class="mb-2">
-          <%= check_box_tag "expense[participant_ids][]",
-              user.id %>
+      <div class="grid grid-cols-2 gap-2">
+        <% @users.each do |user| %>
 
-          <%= user.name %>
-        </div>
-      <% end %>
+          <label class="flex items-center gap-2 border rounded-xl p-2">
+
+            <%= check_box_tag "expense[participant_ids][]",
+                user.id,
+                false,
+                class: "w-4 h-4" %>
+
+            <span><%= user.name %></span>
+
+          </label>
+
+        <% end %>
+      </div>
+      <button type="button"
+          onclick="
+            document.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true)
+          "
+          class="text-sm text-blue-500 mb-2">
+          Select all
+        </button>
     </div>
 
+    
+
+    <!-- SUBMIT -->
     <%= f.submit "Create Expense",
-        class: "bg-black text-white px-6 py-3 rounded-xl" %>
+        class: "w-full bg-black text-white py-3 rounded-xl" %>
 
   <% end %>
+
 </div>

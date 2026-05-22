@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "settlements/create"
   get "expenses/new"
   get "expenses/create"
   get "expenses/index"
@@ -11,4 +12,8 @@ Rails.application.routes.draw do
   get "/summary", to: "summary#index"
 
   resources :expenses, only: [ :new, :create, :index ]
+
+  resources :settlements, only: [ :create ]
+
+  resources :settlements, only: [ :create ]
 end
