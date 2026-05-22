@@ -1,0 +1,9 @@
+<turbo-stream action="prepend" target="expenses">
+  <template>
+    <div class="border rounded-xl p-4 mb-4">
+      <div class="font-bold">
+        <%= @expense.title %> - $<%= @expense.amount %>
+      </div>
+    </div>
+  </template>
+</turbo-stream>

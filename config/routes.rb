@@ -16,4 +16,6 @@ Rails.application.routes.draw do
   resources :settlements, only: [ :create ]
 
   resources :settlements, only: [ :create ]
+
+  resources :expenses, only: [ :index, :new, :create, :destroy ]
 end

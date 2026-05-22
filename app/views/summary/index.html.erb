@@ -1,4 +1,4 @@
-<div class="max-w-xl mx-auto p-6">
+<div class="max-w-md mx-auto px-4 py-4">
 
   <h1 class="text-3xl font-bold mb-2">
     Hi <%= @current_user.name %> 👋
@@ -9,70 +9,72 @@
   </p>
 
   <!-- NET BALANCE CARD -->
-  <% net = @net_balance || 0 %>
+  <div id="summary">
+    <% net = @net_balance || 0 %>
 
-  <div class="p-4 rounded-xl mb-6 text-white
-    <%= net >= 0 ? 'bg-green-500' : 'bg-red-500' %>">
+    <div class="p-4 rounded-xl mb-6 text-white
+      <%= net >= 0 ? 'bg-green-500' : 'bg-red-500' %>">
 
-    <div class="text-sm opacity-80">
-      Net balance
+      <div class="text-sm opacity-80">
+        Net balance
+      </div>
+
+      <div class="text-2xl font-bold">
+        <% if net >= 0 %>
+          +$<%= net.round(2) %>
+        <% else %>
+          -$<%= net.abs.round(2) %>
+        <% end %>
+      </div>
+
+      <div class="text-sm mt-1">
+        <%= net >= 0 ? "People owe you" : "You owe people" %>
+      </div>
     </div>
 
-    <div class="text-2xl font-bold">
-      <% if net >= 0 %>
-        +$<%= net.round(2) %>
-      <% else %>
-        -$<%= net.abs.round(2) %>
-      <% end %>
-    </div>
+    <!-- DETAIL BALANCES -->
+    <h2 class="text-lg font-bold mb-3">
+      Details
+    </h2>
 
-    <div class="text-sm mt-1">
-      <%= net >= 0 ? "People owe you" : "You owe people" %>
-    </div>
-  </div>
+    <div class="space-y-3">
 
-  <!-- DETAIL BALANCES -->
-  <h2 class="text-lg font-bold mb-3">
-    Details
-  </h2>
+      <% @balances.each do |user_id, amount| %>
+        <% next if user_id == @current_user.id %>
+        <% user = User.find(user_id) %>
 
-  <div class="space-y-3">
+        <div class="p-3 border rounded-xl flex justify-between items-center">
 
-    <% @balances.each do |user_id, amount| %>
-      <% next if user_id == @current_user.id %>
-      <% user = User.find(user_id) %>
+          <div>
+            <div class="font-medium"><%= user.name %></div>
 
-      <div class="p-3 border rounded-xl flex justify-between items-center">
+            <div class="text-sm text-gray-500">
+              <% if amount > 0 %>
+                owes you
+              <% elsif amount < 0 %>
+                you owe
+              <% else %>
+                settled
+              <% end %>
+            </div>
+          </div>
 
-        <div>
-          <div class="font-medium"><%= user.name %></div>
+          <div class="font-bold
+            <%= amount > 0 ? 'text-green-600' : 'text-red-600' %>">
 
-          <div class="text-sm text-gray-500">
             <% if amount > 0 %>
-              owes you
+              +$<%= amount.round(2) %>
             <% elsif amount < 0 %>
-              you owe
+              -$<%= amount.abs.round(2) %>
             <% else %>
-              settled
+              $0
             <% end %>
           </div>
+
         </div>
+      <% end %>
 
-        <div class="font-bold
-          <%= amount > 0 ? 'text-green-600' : 'text-red-600' %>">
-
-          <% if amount > 0 %>
-            +$<%= amount.round(2) %>
-          <% elsif amount < 0 %>
-            -$<%= amount.abs.round(2) %>
-          <% else %>
-            $0
-          <% end %>
-        </div>
-
-      </div>
-    <% end %>
-
+    </div>
   </div>
 
   <!-- ACTIONS -->

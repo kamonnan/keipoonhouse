@@ -7,4 +7,6 @@ class Expense < ApplicationRecord
 
   has_many :expense_participants,
     dependent: :destroy
+
+  has_many :expense_participants, dependent: :destroy
 end
