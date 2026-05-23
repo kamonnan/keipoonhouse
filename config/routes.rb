@@ -5,9 +5,9 @@ Rails.application.routes.draw do
 
   resources :expenses
 
-  resources :settlements,
-    only: [ :create ]
-
   get "summary",
     to: "summary#index"
+
+  resources :settlements,
+  only: [ :create ]
 end

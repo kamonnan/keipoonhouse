@@ -1,8 +1,12 @@
-User.create!([
-  { name: "Baibua" },
-  { name: "Gam" },
-  { name: "Kam" },
-  { name: "Namneung" },
-  { name: "Fluke" },
-  { name: "Gee" }
-])
+User.destroy_all
+
+[
+  "Kate",
+  "Bella",
+  "Finn",
+  "Gee",
+  "Giselle",
+  "Kassie"
+].each do |name|
+  User.create!(name: name)
+end
