@@ -1,39 +1,49 @@
 class SummaryController < ApplicationController
   def index
-    return redirect_to root_path unless session[:user_id]
-
-    @current_user = User.find(session[:user_id])
+    @current_user =
+      User.find(session[:user_id])
 
     balances = Hash.new(0)
 
-    Expense.includes(:expense_participants).find_each do |expense|
-      split_count = expense.expense_participants.count
-      next if split_count == 0
+    @unpaid_participants = []
 
-      share = expense.amount.to_f / split_count
+    Expense.includes(
+      expense_items: :expense_item_participants
+    ).find_each do |expense|
+      expense.expense_items.each do |item|
+        participants =
+          item.expense_item_participants
 
-      balances[expense.paid_by_id] += expense.amount.to_f
+        split_count = participants.count
 
-      expense.expense_participants.each do |p|
-        balances[p.user_id] -= share
+        next if split_count == 0
+
+        split_amount =
+          item.amount.to_f / split_count
+
+        participants.each do |participant|
+          next if participant.paid?
+
+          next if participant.user_id ==
+                  expense.paid_by_id
+
+          balances[participant.user_id] -= split_amount
+
+          balances[expense.paid_by_id] += split_amount
+
+          @unpaid_participants << {
+            participant: participant,
+            expense: expense,
+            amount: split_amount
+          }
+        end
       end
     end
 
-    settlements = Settlement.all
+    @balances =
+      balances.reject { |_, v| v.abs < 0.01 }
 
-    settlements.each do |s|
-      balances[s.from_user_id] += s.amount
-      balances[s.to_user_id] -= s.amount
-    end
-
-
-    @balances = balances
-    @net_balance = balances[@current_user.id] || 0
-    @settlements = DebtSimplifier.call(balances)
-
-    Settlement.find_each do |s|
-      balances[s.from_user_id] += s.amount.to_f
-      balances[s.to_user_id] -= s.amount.to_f
-    end
+    @net_balance =
+      @balances[@current_user.id] || 0
   end
 end

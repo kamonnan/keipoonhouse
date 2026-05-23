@@ -1,6 +1,7 @@
 <div class="max-w-md mx-auto px-4 py-4">
 
-  <%= render "shared/mobile_header" %>
+  <%= render "shared/mobile_header",
+    back_path: sessions_path %>
 
   <h1 class="text-3xl font-bold mb-2">
     Hi <%= @current_user.name %> 👋
@@ -90,41 +91,58 @@
         class: "flex-1 text-center border py-2 rounded-xl" %>
   </div>
 
-  <h2 class="text-xl font-bold mt-8 mb-2">
-  Settle debts
-</h2>
+  <h2 class="text-2xl font-bold mt-10 mb-4">
+      Settle debts
+    </h2>
 
-<div class="space-y-2">
-  <% @settlements.each do |s| %>
-    <div class="flex justify-between items-center border p-3 rounded-xl">
+    <div class="space-y-3">
 
-      <div>
-        <div class="font-medium">
-          <%= User.find(s[:from]).name %>
-          → 
-          <%= User.find(s[:to]).name %>
+      <% @unpaid_participants.each do |data| %>
+
+        <% participant = data[:participant] %>
+        <% expense = data[:expense] %>
+        <% amount = data[:amount] %>
+
+        <% next if participant.user_id == expense.paid_by_id %>
+
+        <div class="border rounded-2xl p-4 bg-white">
+
+          <div class="flex justify-between items-start">
+
+            <div>
+
+              <div class="font-semibold text-xl">
+                <%= participant.user.name %>
+              </div>
+
+              <div class="text-gray-500 text-sm">
+                owes
+                <%= expense.paid_by.name %>
+              </div>
+
+              <div class="text-2xl font-bold mt-2">
+                $<%= amount.round(2) %>
+              </div>
+
+            </div>
+
+            <% if expense.paid_by_id == @current_user.id %>
+
+              <%= button_to "Mark paid",
+                  settlements_path(
+                    id: participant.id
+                  ),
+                  method: :post,
+                  class: "bg-black text-white px-4 py-2 rounded-xl" %>
+
+            <% end %>
+
+          </div>
+
         </div>
-
-        <div class="text-sm text-gray-500">
-          $<%= s[:amount].round(2) %>
-        </div>
-      </div>
-
-      <% if s[:from] == @current_user.id %>
-
-        <%= button_to "I paid",
-            settlements_path,
-            method: :post,
-            params: {
-              from_user_id: s[:from],
-              to_user_id: s[:to],
-              amount: s[:amount]
-            },
-            class: "bg-black text-white px-3 py-1 rounded-lg" %>
 
       <% end %>
+
     </div>
-  <% end %>
-</div>
 
 </div>

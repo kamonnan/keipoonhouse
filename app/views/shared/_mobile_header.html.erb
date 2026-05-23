@@ -1,8 +1,26 @@
-<div class="flex items-center gap-3 mb-6">
+<div class="mb-6">
 
-  <button
-    onclick="history.back()"
-    class="text-xl font-bold">
-    ←
-  </button>
+  <div class="flex items-center gap-4">
+
+    <% if local_assigns[:back_path] %>
+
+      <%= link_to back_path,
+          class: "text-3xl font-bold" do %>
+
+        ←
+
+      <% end %>
+
+    <% end %>
+
+    <% if local_assigns[:title] %>
+
+      <div class="text-xl font-bold">
+        <%= title %>
+      </div>
+
+    <% end %>
+
+  </div>
+
 </div>

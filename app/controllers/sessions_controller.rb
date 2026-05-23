@@ -4,12 +4,8 @@ class SessionsController < ApplicationController
   end
 
   def create
-    session[:user_id] = params[:id]
-    redirect_to "/summary"
-  end
+    session[:user_id] = params[:user_id]
 
-  def destroy
-    session[:user_id] = nil
-    redirect_to root_path
+    redirect_to summary_path
   end
 end
