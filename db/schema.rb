@@ -10,9 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_22_070453) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_22_235940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "bills", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "expense_item_participants", force: :cascade do |t|
+    t.bigint "expense_item_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expense_item_id"], name: "index_expense_item_participants_on_expense_item_id"
+    t.index ["user_id"], name: "index_expense_item_participants_on_user_id"
+  end
+
+  create_table "expense_items", force: :cascade do |t|
+    t.bigint "expense_id", null: false
+    t.string "title"
+    t.decimal "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expense_id"], name: "index_expense_items_on_expense_id"
+  end
 
   create_table "expense_participants", force: :cascade do |t|
     t.bigint "expense_id", null: false
@@ -51,6 +75,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_22_070453) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "expense_item_participants", "expense_items"
+  add_foreign_key "expense_item_participants", "users"
+  add_foreign_key "expense_items", "expenses"
   add_foreign_key "expense_participants", "expenses"
   add_foreign_key "expense_participants", "users"
   add_foreign_key "expenses", "users", column: "created_by_id"

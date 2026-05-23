@@ -1,5 +1,7 @@
 <div class="max-w-md mx-auto px-4 py-4">
 
+  <%= render "shared/mobile_header" %>
+
   <h1 class="text-3xl font-bold mb-2">
     Hi <%= @current_user.name %> 👋
   </h1>
@@ -21,9 +23,9 @@
 
       <div class="text-2xl font-bold">
         <% if net >= 0 %>
-          +$<%= net.round(2) %>
+          $<%= net.round(2) %>
         <% else %>
-          -$<%= net.abs.round(2) %>
+          $<%= net.abs.round(2) %>
         <% end %>
       </div>
 
@@ -50,9 +52,9 @@
 
             <div class="text-sm text-gray-500">
               <% if amount > 0 %>
-                owes you
-              <% elsif amount < 0 %>
                 you owe
+              <% elsif amount < 0 %>
+                owes you
               <% else %>
                 settled
               <% end %>
@@ -63,9 +65,9 @@
             <%= amount > 0 ? 'text-green-600' : 'text-red-600' %>">
 
             <% if amount > 0 %>
-              +$<%= amount.round(2) %>
+              $<%= amount.round(2) %>
             <% elsif amount < 0 %>
-              -$<%= amount.abs.round(2) %>
+              $<%= amount.abs.round(2) %>
             <% else %>
               $0
             <% end %>
@@ -108,15 +110,19 @@
         </div>
       </div>
 
-      <%= button_to "Mark as paid",
-          settlements_path,
-          method: :post,
-          params: {
-            from_user_id: s[:from],
-            to_user_id: s[:to],
-            amount: s[:amount]
-          },
-          class: "bg-black text-white px-3 py-1 rounded-lg" %>
+      <% if s[:from] == @current_user.id %>
+
+        <%= button_to "I paid",
+            settlements_path,
+            method: :post,
+            params: {
+              from_user_id: s[:from],
+              to_user_id: s[:to],
+              amount: s[:amount]
+            },
+            class: "bg-black text-white px-3 py-1 rounded-lg" %>
+
+      <% end %>
     </div>
   <% end %>
 </div>

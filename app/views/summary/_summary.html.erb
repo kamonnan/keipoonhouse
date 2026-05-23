@@ -21,9 +21,9 @@
 
       <div class="<%= amount >= 0 ? 'text-green-600' : 'text-red-600' %> font-bold">
         <% if amount > 0 %>
-          +$<%= amount.round(2) %>
+          $<%= amount.round(2) %>
         <% elsif amount < 0 %>
-          -$<%= amount.abs.round(2) %>
+          $<%= amount.abs.round(2) %>
         <% else %>
           $0
         <% end %>
