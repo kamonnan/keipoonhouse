@@ -9,10 +9,6 @@
     Hi <%= @current_user.name %> 👋
   </h1>
 
-  <p class="text-gray-500 mb-8">
-    Here's your current balance
-  </p>
-
   <!-- NET BALANCE -->
 
   <div class="
@@ -23,19 +19,21 @@
   ">
 
     <div class="text-lg mb-2">
-      Net balance
+      Balance
     </div>
 
     <div class="text-5xl font-bold mb-3">
       $<%= @net_balance.abs.round(2) %>
     </div>
 
-    <div class="text-xl">
+    <div class="text-lg">
 
-      <% if @net_balance >= 0 %>
-        People owe you
+      <% if @net_balance > 0 %>
+        people owe you
+        <% elsif @net_balance < 0 %>
+        you owe people
       <% else %>
-        You owe people
+        everyone is clear 🎉
       <% end %>
 
     </div>
@@ -53,7 +51,7 @@
           text-center text-xl font-medium
         " do %>
 
-      ➕ Add Expense
+      ➕ Add Bills
 
     <% end %>
 
@@ -64,7 +62,7 @@
           text-center text-xl font-medium
         " do %>
 
-      📜 History
+      📜 View Bills
 
     <% end %>
 
@@ -73,14 +71,14 @@
 
   <!-- DETAILS -->
 
-  <h2 class="text-2xl font-bold mb-4">
-    Details
+  <h2 class="text-2xl font-bold mb-4 mt-6">
+    สรุปรายการ
   </h2>
 
   <% if @debts.empty? %>
 
     <div class="border rounded-2xl p-6 bg-white text-center text-gray-500">
-      🎉 All settled up
+      No debts! 🎉
     </div>
 
   <% else %>

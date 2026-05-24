@@ -1,7 +1,7 @@
 <div class="max-w-md mx-auto px-4 py-4 pb-24">
 
   <%= render "shared/mobile_header",
-    back_path: summary_path %>
+    back_path: expenses_path %>
 
   <h1 class="text-3xl font-bold mb-6">
 
@@ -36,7 +36,7 @@
         <button
           type="button"
           id="add-item"
-          class="text-sm text-blue-500">
+          class="text-sm text-blue-500 cursor-pointer">
 
           + Add item
 
@@ -60,7 +60,7 @@
 
                 <button
                   type="button"
-                  class="remove-item text-red-500 text-sm">
+                  class="remove-item text-red-500 text-sm cursor-pointer">
 
                   Remove
 
@@ -96,18 +96,36 @@
                       .pluck(:user_id)
                       .include?(user.id) %>
 
-                  <label class="flex items-center gap-2 border rounded-xl p-2 text-sm">
+                  <label class="block cursor-pointer">
 
                     <input
-                      type="checkbox"
-                      name="expense[expense_items_attributes][<%= index %>][participant_ids][]"
-                      value="<%= user.id %>"
-                      <%= "checked" if checked %>
-                      class="w-4 h-4">
+                        type="checkbox"
+                        name="expense[expense_items_attributes][<%= index %>][participant_ids][]"
+                        value="<%= user.id %>"
+                        <%= "checked" if checked %>
+                        class="hidden peer">
 
-                    <span><%= user.name %></span>
+                    <div class="
+                        border
+                        rounded-xl
+                        p-3
+                        text-center
+                        text-sm
+                        font-medium
+                        transition-all
+                        duration-150
 
-                  </label>
+                        peer-checked:bg-black
+                        peer-checked:text-white
+                    ">
+
+                        <%= user.name %>
+
+                    </div>
+
+                    </label>
+
+                  
 
                 <% end %>
 
@@ -181,7 +199,7 @@
 
     <%= f.submit(
         local_assigns[:button_text] || "Save",
-        class: "w-full bg-black text-white py-3 rounded-xl"
+        class: "w-full bg-black text-white py-3 rounded-xl cursor-pointer"
       ) %>
 
   <% end %>

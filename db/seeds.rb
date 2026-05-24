@@ -6,7 +6,7 @@ User.destroy_all
   "Finn",
   "Gee",
   "Giselle",
-  "Kassie"
+  "Kass"
 ].each do |name|
   User.create!(name: name)
 end
