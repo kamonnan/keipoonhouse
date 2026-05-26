@@ -1,7 +1,7 @@
 <div class="max-w-md mx-auto px-4 py-4 pb-24">
 
   <%= render "shared/mobile_header",
-    back_path: expenses_path %>
+    back_path: summary_path %>
 
   <h1 class="text-3xl font-bold mb-6">
 
@@ -12,7 +12,7 @@
   <%= form_with model: @expense do |f| %>
 
     <!-- TITLE -->
-    <div class="mb-4">
+    <div class="mb-8">
 
       <label class="text-sm text-gray-500">
         Title
@@ -36,7 +36,7 @@
         <button
           type="button"
           id="add-item"
-          class="text-sm text-blue-500 cursor-pointer">
+          class="text-sm text-blue-500 cursor-pointer bg-black text-white px-3 py-1 rounded-xl">
 
           + Add item
 
@@ -60,7 +60,7 @@
 
                 <button
                   type="button"
-                  class="remove-item text-red-500 text-sm cursor-pointer">
+                  class="remove-item text-red-500 text-decoration-line: underline text-sm cursor-pointer px-3 py-1 rounded-xl">
 
                   Remove
 
@@ -68,7 +68,7 @@
 
               </div>
 
-              <div class="flex gap-2 mb-3">
+              <div class="flex gap-2 mb-6">
 
                 <input
                   type="text"
@@ -96,7 +96,7 @@
                       .pluck(:user_id)
                       .include?(user.id) %>
 
-                  <label class="block cursor-pointer">
+                  <label class="block cursor-pointer mb-2">
 
                     <input
                         type="checkbox"
@@ -107,16 +107,16 @@
 
                     <div class="
                         border
-                        rounded-xl
+                        rounded-2xl
                         p-3
                         text-center
                         text-sm
-                        font-medium
+                        font-regular
                         transition-all
                         duration-150
 
-                        peer-checked:bg-black
-                        peer-checked:text-white
+                        peer-checked:bg-green-500
+                        peer-checked:text-black-800
                     ">
 
                         <%= user.name %>

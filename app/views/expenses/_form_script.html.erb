@@ -11,22 +11,38 @@ function initExpenseForm() {
   if (!addButton || !itemsContainer) return
 
   const usersHtmlTemplate = `
-    <% @users.each do |user| %>
+  <% @users.each do |user| %>
 
-      <label class="flex items-center gap-2 border rounded-xl p-2 text-sm">
+    <label class="block cursor-pointer">
 
-        <input
-          type="checkbox"
-          name="expense[expense_items_attributes][INDEX][participant_ids][]"
-          value="<%= user.id %>"
-          class="w-4 h-4">
+      <input
+        type="checkbox"
+        name="expense[expense_items_attributes][INDEX][participant_ids][]"
+        value="<%= user.id %>"
+        class="hidden peer">
 
-        <span><%= user.name %></span>
+      <div class="
+        border
+        rounded-xl
+        p-3
+        text-center
+        text-sm
+        font-medium
+        transition-all
+        duration-150
 
-      </label>
+        peer-checked:bg-black
+        peer-checked:text-white
+      ">
 
-    <% end %>
-  `
+        <%= user.name %>
+
+      </div>
+
+    </label>
+
+  <% end %>
+`
 
   // ADD ITEM
   addButton.onclick = (e) => {

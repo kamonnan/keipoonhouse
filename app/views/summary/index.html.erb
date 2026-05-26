@@ -139,13 +139,13 @@
           border-1
           border-black
 
-          md:py-4
-          md:px-4
+          py-4
+          px-4
 
           rounded-3xl
 
-          md:text-base
-          md:font-semibold
+          text-base
+          font-semibold
 
           text-center
 
@@ -176,7 +176,7 @@
     sm:text-3xl
     md:text-2xl
   ">
-    สรุปรายการ
+    Summary
   </h2>
 
   <% if @debts.empty? %>
@@ -334,6 +334,8 @@
                     md:px-4
                     md:py-2
                     md:text-sm
+
+                    cursor-pointer
 
                     active:scale-[0.98]
                     transition-all
